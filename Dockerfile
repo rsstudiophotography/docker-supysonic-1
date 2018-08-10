@@ -34,6 +34,6 @@ EXPOSE 5000
 
 VOLUME [ "/var/lib/supysonic", "/media" ]
 
-USER supysonic
+USER root
 
 ENTRYPOINT [ "/app/dockerrun.sh" ]

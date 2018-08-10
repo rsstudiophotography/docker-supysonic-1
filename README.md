@@ -1,23 +1,12 @@
-# Supysonic docker [![Build Status](https://travis-ci.org/ogarcia/docker-supysonic.svg?branch=master)](https://travis-ci.org/ogarcia/docker-supysonic)
+# Supysonic docker
 
-(c) 2017-2018 Óscar García Amor
+This is a **lightweight** Python implementation of the Subsonic project's API - It's perfect if you want to just run a Subsonic compatible API for your streaming media server, and use an external client (such as [Tomahawk Player](https://www.tomahawk-player.org/) or [DSub for Android](https://play.google.com/store/apps/details?id=github.daneren2005.dsub)) to connect to your media library.
 
-Redistribution, modifications and pull requests are welcomed under the terms
-of GPLv3 license.
+Docker image(s) have been modified from ogarcia's original images for use with the  [Ultimate Media Server](https://github.com/ultimate-pms/ultimate-plex-setup) Project.
 
-[Supysonic][1] is a Python implementation of the [Subsonic][2] server API.
+----------------------------------------
 
-This docker packages **Supysonic** under [Alpine Linux][3], a lightweight
-Linux distribution.
-
-Visit [Docker Hub][4] to see all available tags.
-
-[1]: https://github.com/spl0k/supysonic
-[2]: http://www.subsonic.org
-[3]: https://alpinelinux.org/
-[4]: https://hub.docker.com/r/ogarcia/supysonic/
-
-## Run
+### Running
 
 To run this container exposing Supysonic over a FastCGI file socket in the
 permanent data volume, mounting your `/media` and using sqlite backend,

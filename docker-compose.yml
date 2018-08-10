@@ -1,0 +1,23 @@
+version: '2'
+
+services:
+  subsonic:
+
+    build: .
+    container_name: subsonic
+    restart: always
+    privileged: true
+
+    volumes:
+      - ./config:/var/lib/supysonic
+      
+      # Update to reflect the path to your media...
+      - ./media:/media
+
+    ports:
+      - 8888:5000
+
+    environment:
+      - SUPYSONIC_RUN_MODE=standalone
+
+    cpu_shares: 1024
