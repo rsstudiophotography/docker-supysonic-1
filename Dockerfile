@@ -23,13 +23,13 @@ ENV \
     SUPYSONIC_SCANNER_EXTENSIONS="" \
     SUPYSONIC_SECRET_KEY="" \
     SUPYSONIC_WEBAPP_CACHE_DIR="/var/lib/supysonic/cache" \
-    SUPYSONIC_WEBAPP_LOG_FILE="/var/lib/supysonic/supysonic.log" \
-    SUPYSONIC_WEBAPP_LOG_LEVEL="WARNING" \
-    SUPYSONIC_DAEMON_LOG_FILE="/var/lib/supysonic/supysonic-daemon.log" \
-    SUPYSONIC_DAEMON_LOG_LEVEL="INFO" \
     SUPYSONIC_LASTFM_API_KEY="" \
     SUPYSONIC_LASTFM_SECRET="" \
     SUPYSONIC_RUN_MODE="standalone"
+    #SUPYSONIC_WEBAPP_LOG_FILE="/var/lib/supysonic/supysonic.log" \
+    #SUPYSONIC_WEBAPP_LOG_LEVEL="WARNING" \
+    #SUPYSONIC_DAEMON_LOG_FILE="/var/lib/supysonic/supysonic-daemon.log" \
+    #SUPYSONIC_DAEMON_LOG_LEVEL="INFO" \
 
 EXPOSE 5000
 
@@ -37,4 +37,7 @@ VOLUME [ "/var/lib/supysonic", "/media" ]
 
 USER root
 
-ENTRYPOINT [ "supervisor -c /app/docker/supervisord.conf" ]
+RUN touch /var/run/supervisor.sock && \
+    chmod 777 /var/run/supervisor.sock
+
+CMD ["/usr/bin/supervisord", "--configuration=/app/docker/supervisord.conf"]
