@@ -70,3 +70,6 @@ If you need to enter in a shell to use `supysonic-cli` first run attach to the r
 ```
 docker exec -it subsonic bash
 ```
+## Additional comments:
+
+By default, the container will include all the external transcoders to support most common media formats such as `mp3, oog, flac` etc... However if you wish to encode your music in `oog` format you will need to manually install `oggenc2` in your container's `/bin/` directory - which can be found [here](http://www.rarewares.org/ogg-oggenc.php).

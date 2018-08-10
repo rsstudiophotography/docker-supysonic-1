@@ -1,14 +1,20 @@
 FROM python:3-alpine3.7
 
+## Pull in main application and configure
 RUN apk -U --no-progress upgrade && \
     apk --no-progress add gcc sqlite musl-dev zlib-dev jpeg-dev libjpeg-turbo git bash && \
     git clone https://github.com/spl0k/supysonic.git /app && \
     cd /app && pip install flup && python setup.py install && \
     adduser -S -D -H -h /var/lib/supysonic -s /sbin/nologin -G users \
     -g supysonic supysonic && mkdir -p /var/lib/supysonic && \
-    chown supysonic:users /var/lib/supysonic && \
-    rm -rf /root/.ash_history /root/.cache /var/cache/apk/*
+    chown supysonic:users /var/lib/supysonic
 
+## Add in required tooling for transcoding...
+RUN apk add ffmpeg lame mpg123 vorbis-tools flac
+
+RUN rm -rf /root/.ash_history /root/.cache /var/cache/apk/*
+
+## Copy in additional scripts to bootstrap the app...
 COPY docker /app/docker
 
 ENV \

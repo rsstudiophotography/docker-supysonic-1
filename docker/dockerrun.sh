@@ -13,12 +13,11 @@ fi
 
 # If no sqlite database exists yet (first run) copy into mapped config dir...
 if ! test -f /var/lib/supysonic/supysonic.db && \
-  test "${SUPYSONIC_DB_URI}" == "sqlite:////var/lib/supysonic/supysonic.db"
+    test "${SUPYSONIC_DB_URI}" == "sqlite:////var/lib/supysonic/supysonic.db"
+    ADD_NEW_USER=0
 then
     sqlite3 /var/lib/supysonic/supysonic.db < /app/schema/sqlite.sql
-
-    # New user - add the default user/password of admin:admin
-    supysonic-cli user add admin -a -p password
+    ADD_NEW_USER=1
 fi
 
 # Some builds have the default db hardcoded to /tmp/ location - add in a symlink fix...
@@ -32,6 +31,12 @@ ln -s /var/lib/supysonic/supysonic.db /tmp/supysonic/supysonic.db
 if [ $# -gt 0 ];then
   exec "$@"
 else
+
+    if [ "$ADD_NEW_USER" -eq 1 ];then
+        # New user - add the default user/password of admin:admin (in background once daemon is running)
+        bash -c "sleep 2 && supysonic-cli user add admin -a -p password" &
+    fi
+
   case ${SUPYSONIC_RUN_MODE} in
     fcgi)
       # Make a small python fcgi script and run it
