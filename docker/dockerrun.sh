@@ -16,11 +16,15 @@ fi
 if ! test -f /var/lib/supysonic/supysonic.db && \
   test "${SUPYSONIC_DB_URI}" == "sqlite:////var/lib/supysonic/supysonic.db"
 then
-  cp /app/dockersqlite.db /var/lib/supysonic/supysonic.db
+    sqlite3 /var/lib/supysonic/supysonic.db < /app/schema/sqlite.sql
 fi
 
+# Some builds have the default db hardcoded to /tmp/ location - add in a symlink fix...
+mkdir -p /tmp/supysonic
+ln -s /var/lib/supysonic/supysonic.db /tmp/supysonic/supysonic.db
+
 # Configure with environment vars
-/usr/local/bin/python /app/dockerconfig.py
+/usr/local/bin/python /app/docker/dockerconfig.py
 
 # Exec CMD or supysonic by default if nothing present
 if [ $# -gt 0 ];then
@@ -38,11 +42,11 @@ EOF
       exec /usr/local/bin/python /tmp/supysonic.fcgi
       ;;
     standalone)
-      exec /usr/local/bin/python /app/server.py 0.0.0.0
+      exec /usr/local/bin/python /app/cgi-bin/server.py 0.0.0.0
       ;;
     *)
       echo "Run mode not recognized, switching to standalone debug server mode" 
-      exec /usr/local/bin/python /app/server.py 0.0.0.0
+      exec /usr/local/bin/python /app/cgi-bin/server.py 0.0.0.0
       ;;
   esac
 fi

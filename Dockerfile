@@ -2,20 +2,17 @@ FROM python:3-alpine3.7
 
 ADD https://github.com/spl0k/supysonic/archive/master.zip /supysonic.zip
 
-RUN unzip supysonic.zip && rm supysonic.zip && mkdir /app && \
+RUN unzip supysonic.zip && rm supysonic.zip && mv /supysonic-master /app && \
   apk -U --no-progress upgrade && \
-  apk --no-progress add gcc musl-dev zlib-dev jpeg-dev libjpeg-turbo && \
-  cd supysonic-master && pip install flup && python setup.py install && \
-  mv /supysonic-master/cgi-bin/server.py /app && \
-  mv /supysonic-master/config.sample /app && \
-  cd / && rm -rf /supysonic-master && \
+  apk --no-progress add gcc sqlite musl-dev zlib-dev jpeg-dev libjpeg-turbo && \
+  cd /app && pip install flup && python setup.py install && \
   apk --no-progress del gcc musl-dev zlib-dev jpeg-dev && \
   adduser -S -D -H -h /var/lib/supysonic -s /sbin/nologin -G users \
   -g supysonic supysonic && mkdir -p /var/lib/supysonic && \
   chown supysonic:users /var/lib/supysonic && \
   rm -rf /root/.ash_history /root/.cache /var/cache/apk/*
 
-COPY docker /app
+COPY docker /app/docker
 
 ENV \
   SUPYSONIC_DB_URI="sqlite:////var/lib/supysonic/supysonic.db" \
@@ -36,4 +33,4 @@ VOLUME [ "/var/lib/supysonic", "/media" ]
 
 USER root
 
-ENTRYPOINT [ "/app/dockerrun.sh" ]
+ENTRYPOINT [ "/app/docker/dockerrun.sh" ]
