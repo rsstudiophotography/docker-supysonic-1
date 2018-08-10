@@ -2,9 +2,10 @@ FROM python:3-alpine3.7
 
 ## Pull in main application and configure
 RUN apk -U --no-progress upgrade && \
-    apk --no-progress add gcc sqlite musl-dev zlib-dev jpeg-dev libjpeg-turbo git bash && \
+    apk --no-progress add gcc sqlite musl-dev zlib-dev jpeg-dev supervisor libjpeg-turbo git bash && \
     git clone https://github.com/spl0k/supysonic.git /app && \
     cd /app && pip install flup && python setup.py install && \
+    pip install -e .[watcher] && \
     adduser -S -D -H -h /var/lib/supysonic -s /sbin/nologin -G users \
     -g supysonic supysonic && mkdir -p /var/lib/supysonic && \
     chown supysonic:users /var/lib/supysonic
@@ -36,4 +37,4 @@ VOLUME [ "/var/lib/supysonic", "/media" ]
 
 USER root
 
-ENTRYPOINT [ "/app/docker/dockerrun.sh" ]
+ENTRYPOINT [ "supervisor -c /app/docker/supervisord.conf" ]

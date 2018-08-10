@@ -35,6 +35,7 @@ else
     if [ "$ADD_NEW_USER" -eq 1 ];then
         # New user - add the default user/password of admin:admin (in background once daemon is running)
         bash -c "sleep 2 && supysonic-cli user add admin -a -p password" &
+        bash -c "sleep 5 && supysonic-cli folder add Music /media/" & # This is the default mapped 'media' directory in docker-compose...
     fi
 
   case ${SUPYSONIC_RUN_MODE} in
