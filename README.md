@@ -8,6 +8,13 @@ Docker image(s) have been modified from ogarcia's original images for use with t
 
 ### Running
 
+The quickest way to get up and running is by using [docker-compose](https://docs.docker.com/compose/):
+
+```
+# vi docker-compose.yml
+docker-compose up -d --build
+```
+
 To run this container exposing Supysonic over a FastCGI file socket in the
 permanent data volume, mounting your `/media` and using sqlite backend,
 simply run.

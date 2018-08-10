@@ -1,11 +1,9 @@
 FROM python:3-alpine3.7
 
 RUN apk -U --no-progress upgrade && \
-    apk --no-progress add gcc sqlite musl-dev zlib-dev jpeg-dev libjpeg-turbo git
-
-RUN git clone https://github.com/ultimate-pms/docker-supysonic.git /app && \
+    apk --no-progress add gcc sqlite musl-dev zlib-dev jpeg-dev libjpeg-turbo git && \
+    git clone https://github.com/spl0k/supysonic.git /app && \
     cd /app && pip install flup && python setup.py install && \
-    apk --no-progress del gcc musl-dev zlib-dev jpeg-dev && \
     adduser -S -D -H -h /var/lib/supysonic -s /sbin/nologin -G users \
     -g supysonic supysonic && mkdir -p /var/lib/supysonic && \
     chown supysonic:users /var/lib/supysonic && \
@@ -24,7 +22,7 @@ ENV \
     SUPYSONIC_DAEMON_LOG_LEVEL="INFO" \
     SUPYSONIC_LASTFM_API_KEY="" \
     SUPYSONIC_LASTFM_SECRET="" \
-    SUPYSONIC_RUN_MODE="fcgi"
+    SUPYSONIC_RUN_MODE="standalone"
 
 EXPOSE 5000
 
