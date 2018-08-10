@@ -4,6 +4,8 @@ This is a **lightweight** Python implementation of the Subsonic project's API - 
 
 Docker image(s) have been modified from ogarcia's original images for use with the  [Ultimate Media Server](https://github.com/ultimate-pms/ultimate-plex-setup) Project.
 
+If you're after the original supysonic project without Docker, please see: [https://github.com/spl0k/supysonic](https://github.com/spl0k/supysonic)
+
 ----------------------------------------
 ## Configuring:
 
