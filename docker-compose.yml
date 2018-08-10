@@ -19,5 +19,7 @@ services:
 
     environment:
       - SUPYSONIC_RUN_MODE=standalone
+      - SUPYSONIC_LASTFM_API_KEY=
+      - SUPYSONIC_LASTFM_SECRET=
 
     cpu_shares: 1024
