@@ -1,7 +1,7 @@
 FROM python:3-alpine3.7
 
 RUN apk -U --no-progress upgrade && \
-    apk --no-progress add gcc sqlite musl-dev zlib-dev jpeg-dev libjpeg-turbo git && \
+    apk --no-progress add gcc sqlite musl-dev zlib-dev jpeg-dev libjpeg-turbo git bash && \
     git clone https://github.com/spl0k/supysonic.git /app && \
     cd /app && pip install flup && python setup.py install && \
     adduser -S -D -H -h /var/lib/supysonic -s /sbin/nologin -G users \

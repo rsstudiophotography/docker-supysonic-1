@@ -5,38 +5,11 @@ This is a **lightweight** Python implementation of the Subsonic project's API - 
 Docker image(s) have been modified from ogarcia's original images for use with the  [Ultimate Media Server](https://github.com/ultimate-pms/ultimate-plex-setup) Project.
 
 ----------------------------------------
+## Configuring:
 
-### Running
+Configuration is officially done via the `./config/.supysonic` file, however for ease of running the container quickly, you can set the following environment variables in your `docker-compose.yml` file, which are side-loaded in when the container starts:
 
-The quickest way to get up and running is by using [docker-compose](https://docs.docker.com/compose/):
-
-```
-# vi docker-compose.yml
-docker-compose up -d --build
-```
-
-To run this container exposing Supysonic over a FastCGI file socket in the
-permanent data volume, mounting your `/media` and using sqlite backend,
-simply run.
-
-```
-docker run -d \
-  --name=supysonic \
-  -v /srv/supysonic:/var/lib/supysonic \
-  -v /media:/media \
-  ogarcia/supysonic
-```
-
-This starts Supysonic with a preconfiguration in database so you can login
-using `admin` user with same password.
-
-## Configuration via Docker variables
-
-The `dockerconfig.py` script that configures Supysonic use the following
-Docker environment variables (please refer to [Supysonic readme][5] to know
-more about this settings).
-
-| Variable | Default value |
+| Variable | Default value if unset |
 | --- | --- |
 | `SUPYSONIC_DB_URI` | sqlite:////var/lib/supysonic/supysonic.db |
 | `SUPYSONIC_SCANNER_EXTENSIONS` | |
@@ -48,26 +21,52 @@ more about this settings).
 | `SUPYSONIC_DAEMON_LOG_LEVEL` | INFO |
 | `SUPYSONIC_LASTFM_API_KEY` | |
 | `SUPYSONIC_LASTFM_SECRET` | |
-| `SUPYSONIC_RUN_MODE` | fcgi |
+| `SUPYSONIC_RUN_MODE` | standalone |
 
-Take note that:
+### Last.fm
+
+To get up and running quickly, you'll really only need to configure Last.fm
+
+- Create a Last.fm API account key at: [https://www.last.fm/api/account/create](https://www.last.fm/api/account/create)
+
+
+### Remember that:
+
 - The paths are related to INSIDE Docker.
 - Other parts of Supysonic config file that not are referred here (as
   transcoding or mimetypes) will be untouched, you can configure it by hand.
-- At this moment the supported values for `SUPYSONIC_RUN_MODE` are only
-  `fcgi` to FastCGI file socket and `standalone` to run a debug server on
-  port 5000.
+- For performance you will want to setup a FastCGI server, rather than using the default embedded server.
+- The `dockerconfig.py` script that configures Supysonic uses Docker environment variables which can be configured in your `docker-compose.yml` file (please refer to the [Supysonic Readme](https://github.com/spl0k/supysonic/blob/master/README.md) for further details on each variable and it's options)
 
-  [5]: https://github.com/spl0k/supysonic/blob/master/README.md
 
-## Running a shell
+## Running:
 
-If you need to enter in a shell to use `supysonic-cli` first run Supysonic
-Docker as daemon and then enter on it with following command.
+The quickest way to get up and running is by using [docker-compose](https://docs.docker.com/compose/):
 
 ```
-docker exec -t -i supysonic /bin/sh
+# vi docker-compose.yml
+docker-compose up -d --build
 ```
 
-Remember that `supysonic` is the run name, if you change it you must use the
-same here.
+The container can also be run using a FastCGI socket, however you will need to change (or add) the `SUPYSONIC_RUN_MODE` variable to be: `fcgi`, and you will need to map that socket to your parent host (or another container) if you wish to access it from other services...
+
+
+## Accessing:
+
+By default, Supysonic will be started with the default configuration in the database with the following login details:
+
+ - Username: `admin`
+ - Password: `password`
+
+**BE SURE TO CHANGE THE DEFAULT PASSWORD!**
+
+You may access the login page via your favourite browser (providing you have not changed the port mapping in the docker-compose file) by going to:
+`http://<your-hosts-ip>:8888/`
+
+## Running additional CLI shell tools:
+
+If you need to enter in a shell to use `supysonic-cli` first run attach to the running daemon, and then you may run the CLI tools.
+
+```
+docker exec -it subsonic bash
+```

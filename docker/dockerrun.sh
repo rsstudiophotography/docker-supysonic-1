@@ -16,6 +16,9 @@ if ! test -f /var/lib/supysonic/supysonic.db && \
   test "${SUPYSONIC_DB_URI}" == "sqlite:////var/lib/supysonic/supysonic.db"
 then
     sqlite3 /var/lib/supysonic/supysonic.db < /app/schema/sqlite.sql
+
+    # New user - add the default user/password of admin:admin
+    supysonic-cli user add admin -a -p password
 fi
 
 # Some builds have the default db hardcoded to /tmp/ location - add in a symlink fix...
