@@ -6,13 +6,12 @@
 # Distributed under terms of the GNU GPLv3 license.
 #
 
-# Copy sample file if not exists
+# Copy sample file if not exists to mapped config dir...
 if ! test -f /var/lib/supysonic/.supysonic; then
   cp /app/config.sample /var/lib/supysonic/.supysonic
 fi
 
-# Copy sample sqlite database if not database file is present and user wants
-# to use it
+# If no sqlite database exists yet (first run) copy into mapped config dir...
 if ! test -f /var/lib/supysonic/supysonic.db && \
   test "${SUPYSONIC_DB_URI}" == "sqlite:////var/lib/supysonic/supysonic.db"
 then
