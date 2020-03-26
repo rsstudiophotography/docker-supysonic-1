@@ -9,17 +9,15 @@ services:
     privileged: true
 
     volumes:
-      - ./config:/var/lib/supysonic
+      - /volume1/docker/supysonic:/var/lib/supysonic
       
       # Update to reflect the path to your media...
-      - ./media:/media
+      - /volume1/music/iTunes/iTunes_Media/Music:/media
 
     ports:
-      - 8888:5000
+      - 5080:5000
 
     environment:
       - SUPYSONIC_RUN_MODE=standalone
-      - SUPYSONIC_LASTFM_API_KEY=
-      - SUPYSONIC_LASTFM_SECRET=
 
     cpu_shares: 1024
